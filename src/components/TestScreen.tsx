@@ -10,6 +10,7 @@ const TestScreen = ({
   isTestRunning,
   setIsTestRunning,
 }: TestScreenProps) => {
+  console.log(question.split(""));
   return (
     <div className="relative">
       {!isTestRunning && (
@@ -30,12 +31,12 @@ const TestScreen = ({
         {question}
 
         <hr className="my-4 text-neutral-700 opacity-40 sm:my-6" />
-        {isTestRunning && (
-          <button className="mx-auto flex items-center gap-2 rounded-lg bg-neutral-700 px-3 py-2 text-lg text-white hover:cursor-pointer">
-            <span>Restart Test </span>
-            <img className="w-4" src={IconRestart} alt="Restart test" />
-          </button>
-        )}
+        <button
+          className={`${isTestRunning ? "visible" : "invisible"} mx-auto flex items-center gap-2 rounded-lg bg-neutral-700 px-3 py-2 text-lg text-white hover:cursor-pointer`}
+        >
+          <span>Restart Test </span>
+          <img className="w-4" src={IconRestart} alt="Restart test" />
+        </button>
       </div>
     </div>
   );
