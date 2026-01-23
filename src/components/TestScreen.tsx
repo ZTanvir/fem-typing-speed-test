@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import IconRestart from "../assets/images/icon-restart.svg";
 
 type TestScreenProps = {
@@ -12,10 +12,41 @@ const TestScreen = ({
   setIsTestRunning,
 }: TestScreenProps) => {
   const questionEl = useRef<HTMLDivElement>(null);
-  console.log(question.split(""));
+  const [userInput, setUserInput] = useState<string[]>([]);
+  const [quizIndex, setQuizIndex] = useState(0);
+
+  // Add trailing space for cursor visibility and display last character verification.
+  const breakQuestion = question && (question + " ").split("");
 
   const handleUserKeyPress = (e: React.KeyboardEvent) => {
-    console.log(e.key);
+    if (breakQuestion.length) {
+      if (e.key === "Backspace" && quizIndex > 0) {
+        setQuizIndex(quizIndex - 1);
+        setUserInput(userInput.slice(0, -1));
+        return;
+      } else if (e.key === "Backspace" && quizIndex === 0) {
+        setQuizIndex(0);
+        return;
+      } else if (quizIndex < breakQuestion.length - 1) {
+        setQuizIndex(quizIndex + 1);
+        setUserInput(userInput.concat(e.key));
+      }
+    }
+  };
+
+  const questionLetterClass = (
+    letterIndex: number,
+    currentLetterPositionIndex: number,
+  ) => {
+    if (letterIndex === currentLetterPositionIndex) {
+      return "rounded bg-neutral-700 p-0.5 ";
+    } else if (letterIndex < currentLetterPositionIndex) {
+      if (breakQuestion[letterIndex] === userInput[letterIndex]) {
+        return "text-green-500";
+      } else if (breakQuestion[letterIndex] !== userInput[letterIndex]) {
+        return "text-red-500 border-b-red-500";
+      }
+    }
   };
 
   useEffect(() => {
@@ -44,9 +75,20 @@ const TestScreen = ({
         onKeyDown={handleUserKeyPress}
         ref={questionEl}
         tabIndex={1}
-        className="py-4 text-2xl sm:py-6 sm:text-4xl"
+        className="h-screen py-4 text-2xl sm:py-6 sm:text-4xl"
       >
-        {question}
+        {breakQuestion && (
+          <div className="text-neutral-400">
+            {breakQuestion.map((l, index) => (
+              <span
+                key={index}
+                className={`${questionLetterClass(index, quizIndex)} border-b-2 border-transparent transition duration-100`}
+              >
+                {l}
+              </span>
+            ))}
+          </div>
+        )}
 
         <hr className="my-4 text-neutral-700 opacity-40 sm:my-6" />
         {isTestRunning && (
