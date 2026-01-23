@@ -56,7 +56,7 @@ const TestScreen = ({
   }, [isTestRunning]);
 
   return (
-    <div className="relative">
+    <div className="relative h-full">
       {!isTestRunning && (
         <div className="absolute z-1 flex h-full w-full flex-col items-center justify-center gap-1 backdrop-blur-[5px]">
           <button
@@ -75,7 +75,7 @@ const TestScreen = ({
         onKeyDown={handleUserKeyPress}
         ref={questionEl}
         tabIndex={1}
-        className="h-screen py-4 text-2xl sm:py-6 sm:text-4xl"
+        className="h-full py-4 text-2xl sm:py-6 sm:text-4xl"
       >
         {breakQuestion && (
           <div className="text-neutral-400">
