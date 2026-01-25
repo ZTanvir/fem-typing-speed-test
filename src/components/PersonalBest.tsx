@@ -25,13 +25,13 @@ const PersonalBest = () => {
     <>
       {bestScore && (
         <div className="flex gap-2">
-          <img src={iconPersonalBest} alt="toffee" />
+          <img className="w-5" src={iconPersonalBest} alt="trophy" />
           <div className="flex">
             <div className="text-neutral-400">
               <span className="hidden sm:inline">Personal</span>
               <span className="capitalize sm:lowercase"> Best</span>:
             </div>
-            <span className="text-neutral-0">{bestScore} WPM</span>
+            <span className="text-neutral-100">{bestScore} WPM</span>
           </div>
         </div>
       )}

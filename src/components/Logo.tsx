@@ -3,7 +3,7 @@ import logoSmall from "../assets/images/logo-small.svg";
 
 const Logo = () => {
   return (
-    <picture className="bg-amber-950">
+    <picture>
       <source media="(min-width:425px)" srcSet={logoLarge} />
       <img src={logoSmall} alt="logo" />
     </picture>
