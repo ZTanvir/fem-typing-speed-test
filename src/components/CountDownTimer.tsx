@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 type CountDownTimerProps = {
-  mode: "timed" | "passage";
+  mode: string;
   isTestRunning: boolean;
 };
 
@@ -18,6 +18,8 @@ const CountDownTimer = ({ mode, isTestRunning }: CountDownTimerProps) => {
     } else if (mode === "passage") {
       if (mode === "passage") {
         const minute = Math.trunc(second / 60);
+        console.log(minute, second);
+
         const sec = second % 60;
         if (sec >= 0 && sec <= 9) {
           return `${minute}:0${sec}`;

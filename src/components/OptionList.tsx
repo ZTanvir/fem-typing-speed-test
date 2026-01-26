@@ -2,15 +2,22 @@ type OptionListProps = {
   option: string;
   setOptions: React.Dispatch<React.SetStateAction<string>>;
   options: string[];
+  isTestRunning: boolean;
 };
 
-const OptionList = ({ option, setOptions, options }: OptionListProps) => {
+const OptionList = ({
+  option,
+  setOptions,
+  options,
+  isTestRunning,
+}: OptionListProps) => {
   return (
     <div>
       <div className="hidden sm:flex sm:flex-row sm:gap-2">
         {options.map((o, index) => (
           <button
-            className={`rounded-lg border p-2 text-blue-400 hover:cursor-pointer hover:border-blue-400 ${option === o ? "border-blue-400 text-blue-400" : "border-neutral-500 text-neutral-50"}`}
+            disabled={isTestRunning}
+            className={`rounded-lg border p-2 text-blue-400 capitalize hover:cursor-pointer hover:border-blue-400 ${option === o ? "border-blue-400 text-blue-400" : "border-neutral-500 text-neutral-50"}`}
             key={index}
             onClick={() => setOptions(o)}
           >
@@ -20,7 +27,8 @@ const OptionList = ({ option, setOptions, options }: OptionListProps) => {
       </div>
       <div>
         <select
-          className="w-full sm:hidden"
+          disabled={isTestRunning}
+          className="w-full rounded border border-neutral-500 bg-neutral-900 p-0.5 text-neutral-100 capitalize sm:hidden"
           value={option}
           onChange={(e) => setOptions(e.target.value)}
         >
