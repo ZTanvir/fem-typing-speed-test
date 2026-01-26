@@ -11,18 +11,14 @@ const HomePage = () => {
   const [question, setQuestion] = useState<null | string>(null);
   const [isTestRunning, setIsTestRunning] = useState(false);
 
-  console.log(difficulty, mode);
-
   useEffect(() => {
     async function fetchQuestion(difficultyType: string) {
       const response = await fetch(`http://localhost:3000/${difficultyType}`);
 
       if (response.ok) {
         const data = await response.json();
-        console.log("data", data);
 
         const shuffledData: Question[] = helperFunctions.shuffle(data);
-        console.log("shuffle", shuffledData);
         if (shuffledData.length > 0) {
           setQuestion(shuffledData[0].text);
         }
@@ -32,7 +28,7 @@ const HomePage = () => {
   }, [difficulty]);
 
   return (
-    <div>
+    <div className="grid h-full grid-rows-[auto_1fr]">
       <div>
         <div>
           <CountDownTimer
@@ -41,7 +37,7 @@ const HomePage = () => {
             isTestRunning={isTestRunning}
           />
         </div>
-        <div>
+        <div className="">
           <OptionList
             option={difficulty}
             setOptions={setDifficulty}
@@ -56,13 +52,13 @@ const HomePage = () => {
           />
         </div>
       </div>
-      <div>
+      <>
         <TestScreen
-          question="XYZ"
+          question={question}
           isTestRunning={isTestRunning}
           setIsTestRunning={setIsTestRunning}
         />
-      </div>
+      </>
     </div>
   );
 };

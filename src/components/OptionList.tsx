@@ -12,7 +12,7 @@ const OptionList = ({
   isTestRunning,
 }: OptionListProps) => {
   return (
-    <div>
+    <div className="w-full">
       <div className="hidden sm:flex sm:flex-row sm:gap-2">
         {options.map((o, index) => (
           <button

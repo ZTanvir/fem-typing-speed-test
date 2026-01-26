@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import IconRestart from "../assets/images/icon-restart.svg";
 
 type TestScreenProps = {
-  question: string;
+  question: string | null;
   isTestRunning: boolean;
   setIsTestRunning: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -19,13 +19,15 @@ const TestScreen = ({
   const breakQuestion = question && (question + " ").split("");
 
   const handleUserKeyPress = (e: React.KeyboardEvent) => {
-    if (breakQuestion.length) {
+    if (breakQuestion && breakQuestion.length) {
       if (e.key === "Backspace" && quizIndex > 0) {
         setQuizIndex(quizIndex - 1);
         setUserInput(userInput.slice(0, -1));
         return;
       } else if (e.key === "Backspace" && quizIndex === 0) {
         setQuizIndex(0);
+        return;
+      } else if (e.key === "CapsLock") {
         return;
       } else if (quizIndex < breakQuestion.length - 1) {
         setQuizIndex(quizIndex + 1);
@@ -41,12 +43,19 @@ const TestScreen = ({
     if (letterIndex === currentLetterPositionIndex) {
       return "rounded bg-neutral-700 p-0.5 ";
     } else if (letterIndex < currentLetterPositionIndex) {
-      if (breakQuestion[letterIndex] === userInput[letterIndex]) {
-        return "text-green-500";
-      } else if (breakQuestion[letterIndex] !== userInput[letterIndex]) {
-        return "text-red-500 border-b-red-500";
+      if (breakQuestion) {
+        if (breakQuestion[letterIndex] === userInput[letterIndex]) {
+          return "text-green-500";
+        } else if (breakQuestion[letterIndex] !== userInput[letterIndex]) {
+          return "text-red-500 border-b-red-500";
+        }
       }
     }
+  };
+
+  const handleRestartTestBtn = () => {
+    setQuizIndex(0);
+    setUserInput([]);
   };
 
   useEffect(() => {
@@ -75,7 +84,7 @@ const TestScreen = ({
         onKeyDown={handleUserKeyPress}
         ref={questionEl}
         tabIndex={1}
-        className="h-full py-4 text-2xl sm:py-6 sm:text-4xl"
+        className="h-full py-4 text-2xl focus:outline-none sm:py-6 sm:text-4xl"
       >
         {breakQuestion && (
           <div className="text-neutral-400">
@@ -92,7 +101,10 @@ const TestScreen = ({
 
         <hr className="my-4 text-neutral-700 opacity-40 sm:my-6" />
         {isTestRunning && (
-          <button className="mx-auto flex items-center gap-2 rounded-lg bg-neutral-700 px-3 py-2 text-lg text-white hover:cursor-pointer">
+          <button
+            onClick={handleRestartTestBtn}
+            className="mx-auto flex items-center gap-2 rounded-lg bg-neutral-700 px-3 py-2 text-lg text-white hover:cursor-pointer"
+          >
             <span>Restart Test </span>
             <img className="w-4" src={IconRestart} alt="Restart test" />
           </button>
