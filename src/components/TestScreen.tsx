@@ -96,7 +96,7 @@ const TestScreen = ({
         className="h-full py-4 text-2xl focus:outline-none sm:py-6 sm:text-4xl"
       >
         {breakQuestion && (
-          <div className="text-neutral-400">
+          <div className="px-2 text-neutral-400">
             {breakQuestion.map((l, index) => (
               <span
                 key={index}

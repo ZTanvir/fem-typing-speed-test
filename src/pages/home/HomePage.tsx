@@ -4,6 +4,7 @@ import CountDownTimer from "../../components/CountDownTimer";
 import TestScreen from "../../components/TestScreen";
 import helperFunctions from "../../utils/helperFunctions";
 import ScoreData from "../../components/ScoreData";
+import Divider from "../../components/Divider";
 import type { Question } from "../../types/api";
 
 const HomePage = () => {
@@ -32,15 +33,18 @@ const HomePage = () => {
   }, [difficulty]);
 
   return (
-    <div className="grid h-full grid-rows-[auto_1fr]">
-      <div>
-        <div>
-          <ScoreData name="WPM">
+    <div className="grid h-full grid-rows-[auto_1fr] pt-5">
+      <div className="mb-2 flex flex-col gap-2 px-2 sm:flex-row sm:flex-wrap sm:justify-between">
+        <div className="flex justify-between gap-2 sm:text-xl">
+          <ScoreData name="WPM:">
             <div className="font-bold text-neutral-100">{wpm}</div>
           </ScoreData>
-          <ScoreData name="Accuracy">
+
+          <Divider />
+          <ScoreData name="Accuracy:">
             <div className="font-bold text-neutral-100">{accuracy}%</div>
           </ScoreData>
+          <Divider />
           <ScoreData name="Time:">
             <CountDownTimer
               seconds={seconds}
@@ -50,26 +54,32 @@ const HomePage = () => {
             />
           </ScoreData>
         </div>
-        <div className="">
-          <OptionList
-            option={difficulty}
-            setOptions={setDifficulty}
-            options={[
-              { value: "easy", text: "easy" },
-              { value: "medium", text: "medium" },
-              { value: "hard", text: "hard" },
-            ]}
-            isTestRunning={isTestRunning}
-          />
-          <OptionList
-            option={mode}
-            setOptions={setMode}
-            options={[
-              { value: "timed", text: "timed(60s)" },
-              { value: "passage", text: "passage" },
-            ]}
-            isTestRunning={isTestRunning}
-          />
+        <div className="flex gap-4">
+          <div className="flex flex-1 items-center gap-1">
+            <div className="hidden text-neutral-400 sm:flex">Difficulty:</div>
+            <OptionList
+              option={difficulty}
+              setOptions={setDifficulty}
+              options={[
+                { value: "easy", text: "easy" },
+                { value: "medium", text: "medium" },
+                { value: "hard", text: "hard" },
+              ]}
+              isTestRunning={isTestRunning}
+            />
+          </div>
+          <div className="flex flex-1 items-center gap-1">
+            <div className="hidden text-neutral-400 sm:flex">Time:</div>
+            <OptionList
+              option={mode}
+              setOptions={setMode}
+              options={[
+                { value: "timed", text: "timed(60s)" },
+                { value: "passage", text: "passage" },
+              ]}
+              isTestRunning={isTestRunning}
+            />
+          </div>
         </div>
       </div>
       <>
