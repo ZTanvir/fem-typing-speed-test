@@ -5,11 +5,15 @@ type TestScreenProps = {
   question: string | null;
   isTestRunning: boolean;
   setIsTestRunning: React.Dispatch<React.SetStateAction<boolean>>;
+  setSeconds: React.Dispatch<React.SetStateAction<number>>;
+  mode: string;
 };
 const TestScreen = ({
   question,
   isTestRunning,
   setIsTestRunning,
+  setSeconds,
+  mode,
 }: TestScreenProps) => {
   const questionEl = useRef<HTMLDivElement>(null);
   const [userInput, setUserInput] = useState<string[]>([]);
@@ -56,6 +60,11 @@ const TestScreen = ({
   const handleRestartTestBtn = () => {
     setQuizIndex(0);
     setUserInput([]);
+    if (mode === "timed") {
+      setSeconds(60);
+    } else if (mode === "passage") {
+      setSeconds(0);
+    }
   };
 
   useEffect(() => {

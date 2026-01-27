@@ -1,7 +1,12 @@
+interface option {
+  value: string;
+  text: string;
+}
+
 type OptionListProps = {
   option: string;
   setOptions: React.Dispatch<React.SetStateAction<string>>;
-  options: string[];
+  options: option[];
   isTestRunning: boolean;
 };
 
@@ -17,11 +22,11 @@ const OptionList = ({
         {options.map((o, index) => (
           <button
             disabled={isTestRunning}
-            className={`rounded-lg border p-2 text-blue-400 capitalize hover:cursor-pointer hover:border-blue-400 ${option === o ? "border-blue-400 text-blue-400" : "border-neutral-500 text-neutral-50"}`}
+            className={`rounded-lg border p-2 text-blue-400 capitalize hover:cursor-pointer hover:border-blue-400 ${option === o.value ? "border-blue-400 text-blue-400" : "border-neutral-500 text-neutral-50"}`}
             key={index}
-            onClick={() => setOptions(o)}
+            onClick={() => setOptions(o.value)}
           >
-            {o}
+            {o.text}
           </button>
         ))}
       </div>
@@ -33,8 +38,8 @@ const OptionList = ({
           onChange={(e) => setOptions(e.target.value)}
         >
           {options.map((o, index) => (
-            <option key={index} value={o}>
-              {o}
+            <option key={index} value={o.value}>
+              {o.text}
             </option>
           ))}
         </select>

@@ -1,26 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 type CountDownTimerProps = {
+  seconds: number;
+  setSeconds: React.Dispatch<React.SetStateAction<number>>;
   mode: string;
   isTestRunning: boolean;
 };
 
-const CountDownTimer = ({ mode, isTestRunning }: CountDownTimerProps) => {
-  const [second, setSeconds] = useState(mode === "timed" ? 60 : 0);
-
+const CountDownTimer = ({
+  seconds,
+  setSeconds,
+  mode,
+  isTestRunning,
+}: CountDownTimerProps) => {
   const formatTime = () => {
     if (mode === "timed") {
-      if (second >= 0 && second <= 9) {
-        return `0:0${second}`;
+      if (seconds >= 0 && seconds <= 9) {
+        return `0:0${seconds}`;
       }
-
-      return `0:${second}`;
+      return `0:${seconds}`;
     } else if (mode === "passage") {
       if (mode === "passage") {
-        const minute = Math.trunc(second / 60);
-        console.log(minute, second);
-
-        const sec = second % 60;
+        const minute = Math.trunc(seconds / 60);
+        const sec = seconds % 60;
         if (sec >= 0 && sec <= 9) {
           return `${minute}:0${sec}`;
         }
@@ -34,16 +36,15 @@ const CountDownTimer = ({ mode, isTestRunning }: CountDownTimerProps) => {
     function startTimer() {
       if (isTestRunning) {
         intervalId = setInterval(() => {
-          setSeconds((prevSecond) => {
+          setSeconds((prevSeconds) => {
             if (mode === "timed") {
-              if (prevSecond <= 0) {
+              if (prevSeconds <= 0) {
                 clearInterval(intervalId);
-                // isTestRunning(false);
                 return 0;
               }
-              return prevSecond - 1;
+              return prevSeconds - 1;
             } else {
-              return prevSecond + 1;
+              return prevSeconds + 1;
             }
           });
         }, 1000);
@@ -55,6 +56,17 @@ const CountDownTimer = ({ mode, isTestRunning }: CountDownTimerProps) => {
       if (intervalId) clearInterval(intervalId);
     };
   }, [isTestRunning]);
+
+  useEffect(() => {
+    const changeMode = () => {
+      if (mode === "timed") {
+        setSeconds(60);
+      } else if (mode === "passage") {
+        setSeconds(0);
+      }
+    };
+    changeMode();
+  }, [mode]);
 
   return (
     <span className={isTestRunning ? "text-yellow-400" : "text-neutral-50"}>

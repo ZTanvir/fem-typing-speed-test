@@ -10,6 +10,7 @@ const HomePage = () => {
   const [mode, setMode] = useState("timed");
   const [question, setQuestion] = useState<null | string>(null);
   const [isTestRunning, setIsTestRunning] = useState(false);
+  const [seconds, setSeconds] = useState(60);
 
   useEffect(() => {
     async function fetchQuestion(difficultyType: string) {
@@ -32,7 +33,8 @@ const HomePage = () => {
       <div>
         <div>
           <CountDownTimer
-            key={mode}
+            seconds={seconds}
+            setSeconds={setSeconds}
             mode={mode}
             isTestRunning={isTestRunning}
           />
@@ -41,13 +43,20 @@ const HomePage = () => {
           <OptionList
             option={difficulty}
             setOptions={setDifficulty}
-            options={["easy", "medium", "hard"]}
+            options={[
+              { value: "easy", text: "easy" },
+              { value: "medium", text: "medium" },
+              { value: "hard", text: "hard" },
+            ]}
             isTestRunning={isTestRunning}
           />
           <OptionList
             option={mode}
             setOptions={setMode}
-            options={["timed", "passage"]}
+            options={[
+              { value: "timed", text: "timed(60s)" },
+              { value: "passage", text: "passage" },
+            ]}
             isTestRunning={isTestRunning}
           />
         </div>
@@ -57,6 +66,8 @@ const HomePage = () => {
           question={question}
           isTestRunning={isTestRunning}
           setIsTestRunning={setIsTestRunning}
+          setSeconds={setSeconds}
+          mode={mode}
         />
       </>
     </div>
