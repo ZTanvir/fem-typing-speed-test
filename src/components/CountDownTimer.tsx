@@ -69,7 +69,11 @@ const CountDownTimer = ({
   }, [mode]);
 
   return (
-    <span className={isTestRunning ? "text-yellow-400" : "text-neutral-50"}>
+    <span
+      className={
+        isTestRunning ? "font-bold text-yellow-400" : "text-neutral-50"
+      }
+    >
       {formatTime()}
     </span>
   );

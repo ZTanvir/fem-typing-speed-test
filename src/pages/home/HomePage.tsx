@@ -3,6 +3,7 @@ import OptionList from "../../components/OptionList";
 import CountDownTimer from "../../components/CountDownTimer";
 import TestScreen from "../../components/TestScreen";
 import helperFunctions from "../../utils/helperFunctions";
+import ScoreData from "../../components/ScoreData";
 import type { Question } from "../../types/api";
 
 const HomePage = () => {
@@ -11,6 +12,8 @@ const HomePage = () => {
   const [question, setQuestion] = useState<null | string>(null);
   const [isTestRunning, setIsTestRunning] = useState(false);
   const [seconds, setSeconds] = useState(60);
+  const [wpm, setWpm] = useState(0);
+  const [accuracy, setAccuracy] = useState(100);
 
   useEffect(() => {
     async function fetchQuestion(difficultyType: string) {
@@ -32,12 +35,20 @@ const HomePage = () => {
     <div className="grid h-full grid-rows-[auto_1fr]">
       <div>
         <div>
-          <CountDownTimer
-            seconds={seconds}
-            setSeconds={setSeconds}
-            mode={mode}
-            isTestRunning={isTestRunning}
-          />
+          <ScoreData name="WPM">
+            <div className="font-bold text-neutral-100">{wpm}</div>
+          </ScoreData>
+          <ScoreData name="Accuracy">
+            <div className="font-bold text-neutral-100">{accuracy}%</div>
+          </ScoreData>
+          <ScoreData name="Time:">
+            <CountDownTimer
+              seconds={seconds}
+              setSeconds={setSeconds}
+              mode={mode}
+              isTestRunning={isTestRunning}
+            />
+          </ScoreData>
         </div>
         <div className="">
           <OptionList
