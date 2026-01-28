@@ -6,7 +6,7 @@ const ScoreData = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="flex flex-col items-center gap-1 md:flex-row">
+    <div className="flex flex-col flex-wrap items-center gap-1 md:flex-row">
       <span className="text-neutral-400">{name}</span>
       {children}
     </div>
