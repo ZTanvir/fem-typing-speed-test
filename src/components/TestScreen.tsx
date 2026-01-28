@@ -75,6 +75,28 @@ const TestScreen = ({
         );
         setAccuracy(accuracy);
       }
+      // check for typed completion
+      if (quizIndex === breakQuestion.length - 2) {
+        let correctKeyPressed = 0;
+        let incorrectKeyPressed = 0;
+        for (let index = 0; index < breakQuestion.length - 1; index++) {
+          if (breakQuestion[index] === userInput[index]) {
+            correctKeyPressed += 1;
+          } else {
+            incorrectKeyPressed += 1;
+          }
+        }
+        navigate("/result", {
+          state: {
+            wpm,
+            accuracy,
+            characters: {
+              correct: correctKeyPressed,
+              incorrect: incorrectKeyPressed,
+            },
+          },
+        });
+      }
     }
   };
 
