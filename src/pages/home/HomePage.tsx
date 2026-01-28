@@ -42,7 +42,11 @@ const HomePage = () => {
 
           <Divider />
           <ScoreData name="Accuracy:">
-            <div className="font-bold text-neutral-100">{accuracy}%</div>
+            <div
+              className={`font-bold text-neutral-100 ${isTestRunning && "text-red-500"}`}
+            >
+              {accuracy}%
+            </div>
           </ScoreData>
           <Divider />
           <ScoreData name="Time:">
@@ -68,6 +72,9 @@ const HomePage = () => {
               isTestRunning={isTestRunning}
             />
           </div>
+          <div className="hidden md:block">
+            <Divider />
+          </div>
           <div className="flex flex-1 items-center gap-1">
             <div className="hidden text-neutral-400 sm:flex">Time:</div>
             <OptionList
@@ -89,6 +96,9 @@ const HomePage = () => {
           setIsTestRunning={setIsTestRunning}
           setSeconds={setSeconds}
           mode={mode}
+          setWpm={setWpm}
+          seconds={seconds}
+          setAccuracy={setAccuracy}
         />
       </>
     </div>

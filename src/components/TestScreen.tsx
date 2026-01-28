@@ -5,14 +5,20 @@ type TestScreenProps = {
   question: string | null;
   isTestRunning: boolean;
   setIsTestRunning: React.Dispatch<React.SetStateAction<boolean>>;
+  seconds: number;
   setSeconds: React.Dispatch<React.SetStateAction<number>>;
+  setWpm: React.Dispatch<React.SetStateAction<number>>;
+  setAccuracy: React.Dispatch<React.SetStateAction<number>>;
   mode: string;
 };
 const TestScreen = ({
   question,
   isTestRunning,
+  seconds,
   setIsTestRunning,
   setSeconds,
+  setWpm,
+  setAccuracy,
   mode,
 }: TestScreenProps) => {
   const questionEl = useRef<HTMLDivElement>(null);
@@ -36,6 +42,32 @@ const TestScreen = ({
       } else if (quizIndex < breakQuestion.length - 1) {
         setQuizIndex(quizIndex + 1);
         setUserInput(userInput.concat(e.key));
+        /*
+          Total Number of Words = Total Keys Pressed / 5
+          WPM = Total Number of Words / Time Elapsed in Minutes (rounded down)
+        */
+        const totalKeyPressed = userInput.length + 1;
+        const wpm = Math.trunc(totalKeyPressed / 5 / (seconds / 60));
+        setWpm(wpm);
+        /*
+        Accuracy = (Correct Keys Pressed /  Total Keys Pressed) * 100 = Accuracy%
+        */
+        let correctKeyPressed = 0;
+        // key pressed at the moment
+        if (e.key === breakQuestion[quizIndex]) {
+          correctKeyPressed += 1;
+        }
+        // all key pressed in the past
+        for (let index = 0; index < breakQuestion.length - 1; index++) {
+          if (breakQuestion[index] === userInput[index]) {
+            correctKeyPressed += 1;
+          }
+        }
+
+        const accuracy = Math.trunc(
+          (correctKeyPressed / totalKeyPressed) * 100,
+        );
+        setAccuracy(accuracy);
       }
     }
   };
@@ -60,6 +92,9 @@ const TestScreen = ({
   const handleRestartTestBtn = () => {
     setQuizIndex(0);
     setUserInput([]);
+    setAccuracy(100);
+    setWpm(0);
+
     if (mode === "timed") {
       setSeconds(60);
     } else if (mode === "passage") {
