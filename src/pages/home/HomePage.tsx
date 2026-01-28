@@ -96,8 +96,10 @@ const HomePage = () => {
           setIsTestRunning={setIsTestRunning}
           setSeconds={setSeconds}
           mode={mode}
+          wpm={wpm}
           setWpm={setWpm}
           seconds={seconds}
+          accuracy={accuracy}
           setAccuracy={setAccuracy}
         />
       </>

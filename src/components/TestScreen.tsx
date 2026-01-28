@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import IconRestart from "../assets/images/icon-restart.svg";
+import { useNavigate } from "react-router";
 
 type TestScreenProps = {
   question: string | null;
@@ -7,7 +8,9 @@ type TestScreenProps = {
   setIsTestRunning: React.Dispatch<React.SetStateAction<boolean>>;
   seconds: number;
   setSeconds: React.Dispatch<React.SetStateAction<number>>;
+  wpm: number;
   setWpm: React.Dispatch<React.SetStateAction<number>>;
+  accuracy: number;
   setAccuracy: React.Dispatch<React.SetStateAction<number>>;
   mode: string;
 };
@@ -17,13 +20,16 @@ const TestScreen = ({
   seconds,
   setIsTestRunning,
   setSeconds,
+  wpm,
   setWpm,
+  accuracy,
   setAccuracy,
   mode,
 }: TestScreenProps) => {
   const questionEl = useRef<HTMLDivElement>(null);
   const [userInput, setUserInput] = useState<string[]>([]);
   const [quizIndex, setQuizIndex] = useState(0);
+  const navigate = useNavigate();
 
   // Add trailing space for cursor visibility and display last character verification.
   const breakQuestion = question && (question + " ").split("");
@@ -107,6 +113,32 @@ const TestScreen = ({
       questionEl.current.focus();
     }
   }, [isTestRunning]);
+
+  useEffect(() => {
+    if (mode === "timed" && seconds === 0) {
+      if (breakQuestion) {
+        let correctKeyPressed = 0;
+        let incorrectKeyPressed = 0;
+        for (let index = 0; index < breakQuestion.length - 1; index++) {
+          if (breakQuestion[index] === userInput[index]) {
+            correctKeyPressed += 1;
+          } else {
+            incorrectKeyPressed += 1;
+          }
+        }
+        navigate("/result", {
+          state: {
+            wpm,
+            accuracy,
+            characters: {
+              correct: correctKeyPressed,
+              incorrect: incorrectKeyPressed,
+            },
+          },
+        });
+      }
+    }
+  }, [seconds]);
 
   return (
     <div className="relative h-full">
