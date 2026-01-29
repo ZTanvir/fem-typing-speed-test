@@ -34,6 +34,16 @@ const TestScreen = ({
   // Add trailing space for cursor visibility and display last character verification.
   const breakQuestion = question && (question + " ").split("");
 
+  const calculateWpm = (seconds: number, totalKeyPressed: number) => {
+    if (seconds <= 0) {
+      return 0;
+    }
+    const words = totalKeyPressed / 5;
+    const minutes = seconds / 60;
+    const wpm = Math.round(words / minutes);
+    return wpm;
+  };
+
   const handleUserKeyPress = (e: React.KeyboardEvent) => {
     if (breakQuestion && breakQuestion.length) {
       if (e.key === "Backspace" && quizIndex > 0) {
@@ -52,15 +62,19 @@ const TestScreen = ({
           Total Number of Words = Total Keys Pressed / 5
           WPM = Total Number of Words / Time Elapsed in Minutes (rounded down)
         */
+
         const totalKeyPressed = userInput.length + 1;
-        if (seconds <= 0) {
-          setWpm(0);
-        } else if (seconds > 0) {
-          const words = totalKeyPressed / 5;
-          const minutes = seconds / 60;
-          const wpm = Math.round(words / minutes);
-          setWpm(wpm);
+
+        if (mode === "timed") {
+          const initialTime = 60;
+          const timeElapsed = initialTime - seconds;
+          const updatedWpm = calculateWpm(timeElapsed, totalKeyPressed);
+          setWpm(updatedWpm);
+        } else if (mode === "passage") {
+          const updatedWpm = calculateWpm(seconds, totalKeyPressed);
+          setWpm(updatedWpm);
         }
+
         /*
         Accuracy = (Correct Keys Pressed /  Total Keys Pressed) * 100 = Accuracy%
         */
