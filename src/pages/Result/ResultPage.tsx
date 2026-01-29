@@ -33,6 +33,7 @@ const ResultPage = () => {
   };
 
   const scoreStatus = calculateScoreStatus(homePageState?.wpm, bestScore);
+  console.log(homePageState?.wpm, bestScore, scoreStatus);
 
   useEffect(() => {
     if (homePageState?.wpm) {
