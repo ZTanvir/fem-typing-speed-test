@@ -1,12 +1,21 @@
 import { useLocation, useOutletContext } from "react-router";
+import { Link } from "react-router";
 import type { Score } from "../../types/typingTypes";
 import iconRestart from "../../assets/images/icon-restart-black.svg";
-import { Link } from "react-router";
+import iconCompleted from "../../assets/images/icon-completed.svg";
+import iconNew from "../../assets/images/icon-new-pb.svg";
+import iconConfetti from "../../assets/images/pattern-confetti.svg";
+import { useEffect } from "react";
+
+type BestScoreProps = {
+  bestScore: number | null;
+  setBestScore: React.Dispatch<React.SetStateAction<number | null>>;
+};
 
 const ResultPage = () => {
   const location = useLocation();
   const homePageState: Score | null = location?.state;
-  const { bestScore, setBestScore } = useOutletContext();
+  const { bestScore, setBestScore }: BestScoreProps = useOutletContext();
 
   const calculateScoreStatus = (
     currentScore: number | undefined,
@@ -24,13 +33,57 @@ const ResultPage = () => {
   };
 
   const scoreStatus = calculateScoreStatus(homePageState?.wpm, bestScore);
-  console.log(scoreStatus);
+
   return (
     <div>
       {homePageState && (
-        <>
+        <div>
+          {scoreStatus === "baseLineResult" && (
+            <section>
+              <div className="mx-auto mt-10 max-w-xl px-2">
+                <div className="best-score-container">
+                  <img className="w-20" src={iconCompleted} alt="Check mark" />
+                  <h3 className="text-3xl font-bold text-neutral-100">
+                    Baseline Established!
+                  </h3>
+                  <p className="leading-5 text-neutral-400">
+                    You’ve set the bar. Now the real challenge begins—time to
+                    beat it.
+                  </p>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {scoreStatus === "result" && (
+            <section>
+              <div className="mx-auto mt-10 max-w-xl px-2">
+                <div className="best-score-container">
+                  <img className="w-20" src={iconCompleted} alt="Check mark" />
+                  <h3 className="text-3xl font-bold text-neutral-100">
+                    Test Complete!
+                  </h3>
+                  <p className="leading-5 text-neutral-400">
+                    Solid run. Keep pushing to beat your high score.
+                  </p>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {scoreStatus === "newBestResult" && (
+            <section>
+              <div className="mx-auto mt-10 max-w-xl px-2">
+                <div className="best-score-container">
+                  <img className="w-20" src={iconNew} alt="Celebration" />
+                  <h3>High Score Smashed!</h3>
+                  <p>You’re getting faster. That was incredible typing.</p>
+                </div>
+              </div>
+            </section>
+          )}
           <section id="scoreboard">
-            <div className="mx-auto flex max-w-xl flex-col justify-center space-y-4 px-2 text-xl sm:flex-row sm:space-y-0 sm:space-x-4">
+            <div className="mx-auto mt-10 flex max-w-xl flex-col justify-center space-y-4 px-2 text-xl sm:flex-row sm:space-y-0 sm:space-x-4">
               <div className="flex-1 rounded-xl border border-neutral-700 p-3">
                 <div className="text-neutral-400">WPM:</div>
                 <div className="font-bold text-neutral-100">
@@ -57,7 +110,8 @@ const ResultPage = () => {
               </div>
             </div>
           </section>
-          <div className="mx-auto mt-5 w-30">
+
+          <div className="mx-auto mt-10 w-30">
             <Link
               className="flex items-center justify-center space-x-2 rounded-xl bg-neutral-100 p-2 text-neutral-900 hover:cursor-pointer hover:opacity-80"
               to="/"
@@ -66,7 +120,17 @@ const ResultPage = () => {
               <img className="w-4" src={iconRestart} alt="Restart" />
             </Link>
           </div>
-        </>
+
+          {scoreStatus === "newBestResult" && (
+            <div className="mt-10">
+              <img
+                src={iconConfetti}
+                className="w-full"
+                alt="celebrate with confetti"
+              />
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
