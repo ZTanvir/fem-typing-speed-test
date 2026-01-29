@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import { useLocation, useOutletContext } from "react-router";
 import type { Score } from "../../types/typingTypes";
 import iconRestart from "../../assets/images/icon-restart-black.svg";
 import { Link } from "react-router";
@@ -6,7 +6,25 @@ import { Link } from "react-router";
 const ResultPage = () => {
   const location = useLocation();
   const homePageState: Score | null = location?.state;
-  console.log(homePageState);
+  const { bestScore, setBestScore } = useOutletContext();
+
+  const calculateScoreStatus = (
+    currentScore: number | undefined,
+    previousScore: null | number,
+  ) => {
+    if (currentScore) {
+      if (!previousScore) {
+        return "baseLineResult";
+      } else if (currentScore > previousScore) {
+        return "newBestResult";
+      } else {
+        return "result";
+      }
+    }
+  };
+
+  const scoreStatus = calculateScoreStatus(homePageState?.wpm, bestScore);
+  console.log(scoreStatus);
   return (
     <div>
       {homePageState && (

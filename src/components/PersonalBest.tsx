@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import iconPersonalBest from "../assets/images/icon-personal-best.svg";
-const PersonalBest = () => {
-  const [bestScore, setBestScore] = useState<null | number>(() => {
-    const score = JSON.parse(
-      window.localStorage.getItem("typingSpeedTestAppScore") || "null",
-    );
-    if (score) {
-      return score;
-    }
-    window.localStorage.setItem(
-      "typingSpeedTestAppScore",
-      JSON.stringify(null),
-    );
-    return null;
-  });
+
+type PersonalBestProps = {
+  bestScore: number | null;
+  setBestScore: React.Dispatch<React.SetStateAction<number | null>>;
+};
+
+const PersonalBest = ({ bestScore, setBestScore }: PersonalBestProps) => {
   useEffect(() => {
     window.localStorage.setItem(
       "typingSpeedTestAppScore",
       JSON.stringify(bestScore),
     );
+    const saveScore = window.localStorage.getItem("typingSpeedTestAppScore");
+
+    if (saveScore) {
+      const score = JSON.parse(saveScore);
+      setBestScore(score);
+    }
   }, [bestScore]);
 
   return (
