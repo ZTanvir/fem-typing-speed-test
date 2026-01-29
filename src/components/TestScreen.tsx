@@ -53,8 +53,14 @@ const TestScreen = ({
           WPM = Total Number of Words / Time Elapsed in Minutes (rounded down)
         */
         const totalKeyPressed = userInput.length + 1;
-        const wpm = Math.trunc(totalKeyPressed / 5 / (seconds / 60));
-        setWpm(wpm);
+        if (seconds <= 0) {
+          setWpm(0);
+        } else if (seconds > 0) {
+          const words = totalKeyPressed / 5;
+          const minutes = seconds / 60;
+          const wpm = Math.round(words / minutes);
+          setWpm(wpm);
+        }
         /*
         Accuracy = (Correct Keys Pressed /  Total Keys Pressed) * 100 = Accuracy%
         */
