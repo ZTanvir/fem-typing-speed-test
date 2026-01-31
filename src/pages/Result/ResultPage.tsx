@@ -5,7 +5,7 @@ import iconRestart from "../../assets/images/icon-restart-black.svg";
 import iconCompleted from "../../assets/images/icon-completed.svg";
 import iconNew from "../../assets/images/icon-new-pb.svg";
 import iconConfetti from "../../assets/images/pattern-confetti.svg";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type BestScoreProps = {
   bestScore: number | null;
@@ -16,24 +16,17 @@ const ResultPage = () => {
   const location = useLocation();
   const homePageState: Score | null = location?.state;
   const { bestScore, setBestScore }: BestScoreProps = useOutletContext();
-
-  const calculateScoreStatus = (
-    currentScore: number | undefined,
-    previousScore: null | number,
-  ) => {
-    if (currentScore) {
-      if (!previousScore) {
+  const [scoreStatus] = useState(() => {
+    if (homePageState?.wpm) {
+      if (!bestScore) {
         return "baseLineResult";
-      } else if (currentScore > previousScore) {
+      } else if (homePageState?.wpm > bestScore) {
         return "newBestResult";
       } else {
         return "result";
       }
     }
-  };
-
-  const scoreStatus = calculateScoreStatus(homePageState?.wpm, bestScore);
-  console.log(homePageState?.wpm, bestScore, scoreStatus);
+  });
 
   useEffect(() => {
     if (homePageState?.wpm) {
@@ -42,9 +35,9 @@ const ResultPage = () => {
   }, []);
 
   return (
-    <div>
+    <>
       {homePageState && (
-        <div>
+        <div className="flex h-full flex-col">
           {scoreStatus === "baseLineResult" && (
             <section>
               <div className="mx-auto mt-10 max-w-xl px-2">
@@ -83,8 +76,12 @@ const ResultPage = () => {
               <div className="mx-auto mt-10 max-w-xl px-2">
                 <div className="best-score-container">
                   <img className="w-20" src={iconNew} alt="Celebration" />
-                  <h3>High Score Smashed!</h3>
-                  <p>You’re getting faster. That was incredible typing.</p>
+                  <h3 className="text-3xl font-bold text-neutral-100">
+                    High Score Smashed!
+                  </h3>
+                  <p className="leading-5 text-neutral-400">
+                    You’re getting faster. That was incredible typing.
+                  </p>
                 </div>
               </div>
             </section>
@@ -129,17 +126,17 @@ const ResultPage = () => {
           </div>
 
           {scoreStatus === "newBestResult" && (
-            <div className="mt-10">
+            <div className="mt-10 flex-1">
               <img
                 src={iconConfetti}
-                className="w-full"
+                className="h-full object-cover"
                 alt="celebrate with confetti"
               />
             </div>
           )}
         </div>
       )}
-    </div>
+    </>
   );
 };
 export default ResultPage;

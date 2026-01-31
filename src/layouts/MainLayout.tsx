@@ -16,14 +16,13 @@ const MainLayout = () => {
     );
     return null;
   });
-
   return (
     <div className="font-sora grid h-screen grid-rows-[auto_1fr] bg-neutral-900 py-4">
       <header className="flex items-start justify-between px-2">
         <Logo />
         <PersonalBest bestScore={bestScore} setBestScore={setBestScore} />
       </header>
-      <main>
+      <main className="">
         <Outlet context={{ bestScore, setBestScore }} />
       </main>
     </div>
