@@ -1,5 +1,6 @@
 // Optimized O(n) Shuffle
 const shuffle = <T>(array: T[]): T[] => {
+  if (!array) return [];
   const result = [...array];
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
