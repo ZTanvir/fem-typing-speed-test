@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 type CountDownTimerProps = {
   seconds: number;
@@ -57,7 +57,7 @@ const CountDownTimer = ({
     };
   }, [isTestRunning]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const changeMode = () => {
       if (mode === "timed") {
         setSeconds(60);
