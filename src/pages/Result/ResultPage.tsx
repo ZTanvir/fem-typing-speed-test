@@ -17,7 +17,7 @@ const ResultPage = () => {
   const homePageState: Score | null = location?.state;
   const { bestScore, setBestScore }: BestScoreProps = useOutletContext();
   const [scoreStatus] = useState(() => {
-    if (homePageState?.wpm) {
+    if (typeof homePageState?.wpm !== "undefined") {
       if (!bestScore) {
         return "baseLineResult";
       } else if (homePageState?.wpm > bestScore) {
@@ -29,8 +29,12 @@ const ResultPage = () => {
   });
 
   useEffect(() => {
-    if (homePageState?.wpm) {
-      setBestScore(homePageState.wpm);
+    if (typeof homePageState?.wpm !== "undefined") {
+      if (bestScore === null) {
+        setBestScore(homePageState.wpm);
+      } else if (homePageState.wpm > bestScore) {
+        setBestScore(homePageState.wpm);
+      }
     }
   }, []);
 
