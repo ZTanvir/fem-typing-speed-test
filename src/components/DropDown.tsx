@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import dropDownIcon from "../assets/images/icon-down-arrow.svg";
-
-interface Option {
-  value: string;
-  text: string;
-}
+import type { Option } from "../types/typingTypes";
 
 type DropDownProps = {
   option: string;

@@ -1,9 +1,5 @@
 import DropDown from "./DropDown";
-
-interface Option {
-  value: string;
-  text: string;
-}
+import type { Option } from "../types/typingTypes";
 
 type OptionListProps = {
   option: string;

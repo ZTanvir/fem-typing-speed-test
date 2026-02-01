@@ -6,3 +6,8 @@ export type Score = {
     incorrect: number;
   };
 };
+
+export interface Option {
+  value: string;
+  text: string;
+}
