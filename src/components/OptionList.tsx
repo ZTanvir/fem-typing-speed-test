@@ -1,3 +1,5 @@
+import DropDown from "./DropDown";
+
 interface option {
   value: string;
   text: string;
@@ -30,19 +32,9 @@ const OptionList = ({
           </button>
         ))}
       </div>
-      <div>
-        <select
-          disabled={isTestRunning}
-          className="w-full rounded border border-neutral-500 bg-neutral-900 p-0.5 text-neutral-100 capitalize sm:hidden"
-          value={option}
-          onChange={(e) => setOptions(e.target.value)}
-        >
-          {options.map((o, index) => (
-            <option key={index} value={o.value}>
-              {o.text}
-            </option>
-          ))}
-        </select>
+      {/* dropdown mobile */}
+      <div className="sm:hidden">
+        <DropDown option={option} setOptions={setOptions} options={options} />
       </div>
     </div>
   );

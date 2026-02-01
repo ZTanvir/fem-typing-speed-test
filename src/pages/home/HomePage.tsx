@@ -78,7 +78,7 @@ const HomePage = () => {
           <div className="hidden md:block">
             <Divider />
           </div>
-          <div className="flex flex-1 items-center gap-1">
+          <div className="flex flex-1 gap-1 md:items-center">
             <div className="hidden text-neutral-400 sm:flex">Time:</div>
             <OptionList
               option={mode}
