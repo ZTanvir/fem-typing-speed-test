@@ -19,12 +19,16 @@ const HomePage = () => {
   useEffect(() => {
     async function fetchQuestion(difficultyType: string) {
       // assign fetchUrl address based on localhost or vercel address
-      const fetchUrl = `${import.meta.env.DEV ? "http://localhost:3000/" : "/data/db.json/"}${difficultyType}`;
+      const fetchUrl = `${import.meta.env.DEV ? `http://localhost:3000/${difficultyType}` : "/data/db.json"}`;
       const response = await fetch(`${fetchUrl}`);
 
       if (response.ok) {
-        const data = await response.json();
-        const shuffledData: Question[] = helperFunctions.shuffle(data);
+        let data = await response.json();
+        // in server /data/db.json/difficultyType not accessible
+        data = import.meta.env.DEV ? data : data[difficultyType];
+        const shuffledData: Question[] = helperFunctions.shuffle(
+          data[difficultyType],
+        );
         if (shuffledData.length > 0) {
           setQuestion(shuffledData[0].text);
         }
