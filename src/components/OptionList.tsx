@@ -1,6 +1,6 @@
 import DropDown from "./DropDown";
 
-interface option {
+interface Option {
   value: string;
   text: string;
 }
@@ -8,7 +8,7 @@ interface option {
 type OptionListProps = {
   option: string;
   setOptions: React.Dispatch<React.SetStateAction<string>>;
-  options: option[];
+  options: Option[];
   isTestRunning: boolean;
 };
 

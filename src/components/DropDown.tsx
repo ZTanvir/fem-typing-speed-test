@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import dropDownIcon from "../assets/images/icon-down-arrow.svg";
 
-interface option {
+interface Option {
   value: string;
   text: string;
 }
@@ -9,7 +9,7 @@ interface option {
 type DropDownProps = {
   option: string;
   setOptions: React.Dispatch<React.SetStateAction<string>>;
-  options: option[];
+  options: Option[];
 };
 
 const DropDown = ({ option, setOptions, options }: DropDownProps) => {
