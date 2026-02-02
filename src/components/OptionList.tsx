@@ -34,7 +34,12 @@ const OptionList = ({
       </div>
       {/* dropdown mobile */}
       <div className="sm:hidden">
-        <DropDown option={option} setOptions={setOptions} options={options} />
+        <DropDown
+          option={option}
+          setOptions={setOptions}
+          options={options}
+          isTestRunning={isTestRunning}
+        />
       </div>
     </div>
   );

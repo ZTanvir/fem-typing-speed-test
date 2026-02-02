@@ -149,7 +149,6 @@ const TestScreen = ({
   };
 
   useEffect(() => {
-    console.log("is test running", isTestRunning);
     if (isTestRunning && textAreaEl.current) {
       textAreaEl.current.focus();
     }
