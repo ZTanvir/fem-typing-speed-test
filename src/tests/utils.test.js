@@ -22,3 +22,29 @@ describe("Shuffle helper function", () => {
     expect(helperFunction.shuffle()).toEqual([]);
   });
 });
+
+describe("countCorrectIncorrectKeyPressed helper function", () => {
+  it("Return [0,0] for empty array", () => {
+    expect(helperFunction.countCorrectIncorrectKeyPressed([], [])).toEqual([
+      0, 0,
+    ]);
+  });
+
+  it("Return [2,0] for [a,b] [a,b]", () => {
+    expect(
+      helperFunction.countCorrectIncorrectKeyPressed(["a", "b"], ["a", "b"]),
+    ).toEqual([2, 0]);
+  });
+
+  it("Return [0,2] for [x,y] [a,b]", () => {
+    expect(
+      helperFunction.countCorrectIncorrectKeyPressed(["x", "y"], ["a", "b"]),
+    ).toEqual([0, 2]);
+  });
+
+  it("Return [1,1] for [x,y] [x,b]", () => {
+    expect(
+      helperFunction.countCorrectIncorrectKeyPressed(["x", "y"], ["x", "b"]),
+    ).toEqual([1, 1]);
+  });
+});

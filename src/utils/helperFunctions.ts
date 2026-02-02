@@ -9,4 +9,20 @@ const shuffle = <T>(array: T[]): T[] => {
   return result;
 };
 
-export default { shuffle };
+const countCorrectIncorrectKeyPressed = (
+  items: string[] = [],
+  compareItems: string[] = [],
+) => {
+  let correctKeyPressed = 0;
+  let incorrectKeyPressed = 0;
+  for (let index = 0; index < items.length; index++) {
+    if (items[index] === compareItems[index]) {
+      correctKeyPressed += 1;
+    } else {
+      incorrectKeyPressed += 1;
+    }
+  }
+  return [correctKeyPressed, incorrectKeyPressed];
+};
+
+export default { shuffle, countCorrectIncorrectKeyPressed };
