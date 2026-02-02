@@ -110,6 +110,7 @@ const TestScreen = ({
     setUserInput([]);
     setAccuracy(100);
     setWpm(0);
+    setIsTestRunning(false);
 
     if (mode === "timed") {
       setSeconds(60);
