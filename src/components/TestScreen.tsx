@@ -33,7 +33,7 @@ const TestScreen = ({
   const navigate = useNavigate();
 
   // Add trailing space for cursor visibility and display last character verification.
-  const breakQuestion = question && (question + " ").split("");
+  const breakQuestion = question && question.split("");
 
   const calculateWpm = (seconds: number, totalKeyPressed: number) => {
     if (seconds <= 0) {
@@ -97,7 +97,7 @@ const TestScreen = ({
         setAccuracy(accuracy);
       }
       // check for typed completion
-      if (quizIndex === breakQuestion.length - 2) {
+      if (quizIndex === breakQuestion.length - 1) {
         const [correctKeyPressed, incorrectKeyPressed] =
           helperFunctions.countCorrectIncorrectKeyPressed(
             breakQuestion,

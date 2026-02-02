@@ -15,7 +15,7 @@ const countCorrectIncorrectKeyPressed = (
 ) => {
   let correctKeyPressed = 0;
   let incorrectKeyPressed = 0;
-  for (let index = 0; index < items.length - 1; index++) {
+  for (let index = 0; index < items.length; index++) {
     if (items[index] === compareItems[index]) {
       correctKeyPressed += 1;
     } else {
