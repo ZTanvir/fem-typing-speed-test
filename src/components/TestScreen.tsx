@@ -26,7 +26,7 @@ const TestScreen = ({
   setAccuracy,
   mode,
 }: TestScreenProps) => {
-  const questionEl = useRef<HTMLDivElement>(null);
+  const textAreaEl = useRef<HTMLTextAreaElement>(null);
   const [userInput, setUserInput] = useState<string[]>([]);
   const [quizIndex, setQuizIndex] = useState(0);
   const navigate = useNavigate();
@@ -106,6 +106,7 @@ const TestScreen = ({
             incorrectKeyPressed += 1;
           }
         }
+        // send score data to /result page
         navigate("/result", {
           state: {
             wpm,
@@ -151,35 +152,39 @@ const TestScreen = ({
   };
 
   useEffect(() => {
-    if (isTestRunning && questionEl.current) {
-      questionEl.current.focus();
+    console.log("is test running", isTestRunning);
+    if (isTestRunning && textAreaEl.current) {
+      textAreaEl.current.focus();
     }
-  }, [isTestRunning]);
+  });
 
   useEffect(() => {
-    if (mode === "timed" && seconds === 0) {
-      if (breakQuestion) {
-        let correctKeyPressed = 0;
-        let incorrectKeyPressed = 0;
-        for (let index = 0; index < breakQuestion.length - 1; index++) {
-          if (breakQuestion[index] === userInput[index]) {
-            correctKeyPressed += 1;
-          } else {
-            incorrectKeyPressed += 1;
+    function calculateResult() {
+      if (mode === "timed" && seconds === 0) {
+        if (breakQuestion) {
+          let correctKeyPressed = 0;
+          let incorrectKeyPressed = 0;
+          for (let index = 0; index < breakQuestion.length - 1; index++) {
+            if (breakQuestion[index] === userInput[index]) {
+              correctKeyPressed += 1;
+            } else {
+              incorrectKeyPressed += 1;
+            }
           }
-        }
-        navigate("/result", {
-          state: {
-            wpm,
-            accuracy,
-            characters: {
-              correct: correctKeyPressed,
-              incorrect: incorrectKeyPressed,
+          navigate("/result", {
+            state: {
+              wpm,
+              accuracy,
+              characters: {
+                correct: correctKeyPressed,
+                incorrect: incorrectKeyPressed,
+              },
             },
-          },
-        });
+          });
+        }
       }
     }
+    calculateResult();
   }, [seconds]);
 
   return (
@@ -198,22 +203,26 @@ const TestScreen = ({
         </div>
       )}
 
-      <div
-        onKeyDown={handleUserKeyPress}
-        ref={questionEl}
-        tabIndex={1}
-        className="h-full py-4 text-2xl focus:outline-none sm:py-6 sm:text-4xl"
-      >
+      <div className="h-full py-4 text-2xl sm:py-6 sm:text-4xl">
         {breakQuestion && (
-          <div className="px-2 text-neutral-400">
-            {breakQuestion.map((l, index) => (
-              <span
-                key={index}
-                className={`${questionLetterClass(index, quizIndex)} border-b-2 border-transparent transition duration-100`}
-              >
-                {l}
-              </span>
-            ))}
+          <div>
+            <textarea
+              className="absolute top-0 z-[-1] h-0 w-0 opacity-0"
+              name="userInput"
+              id="userInput"
+              ref={textAreaEl}
+              onKeyDown={handleUserKeyPress}
+            ></textarea>
+            <div className="px-2 text-neutral-400">
+              {breakQuestion.map((l, index) => (
+                <span
+                  key={index}
+                  className={`${questionLetterClass(index, quizIndex)} border-b-2 border-transparent transition duration-100`}
+                >
+                  {l}
+                </span>
+              ))}
+            </div>
           </div>
         )}
 
