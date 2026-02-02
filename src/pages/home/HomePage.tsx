@@ -19,14 +19,18 @@ const HomePage = () => {
   useEffect(() => {
     async function fetchQuestion(difficultyType: string) {
       // assign fetchUrl address based on localhost or vercel address
-      const fetchUrl = `${import.meta.env.DEV ? `http://localhost:3000/${difficultyType}` : "/data/db.json"}`;
+      // const fetchUrl = `${import.meta.env.DEV ? `http://localhost:3000/${difficultyType}` : "/data/db.json"}`;
+      const fetchUrl = "https://fem-typing-speed-test.vercel.app/data/db.json";
       const response = await fetch(`${fetchUrl}`);
 
       if (response.ok) {
-        let data = await response.json();
+        const data = await response.json();
         // in server /data/db.json/difficultyType not accessible
-        data = import.meta.env.DEV ? data : data[difficultyType];
-        const shuffledData: Question[] = helperFunctions.shuffle(data);
+        // data = import.meta.env.DEV ? data : data[difficultyType];
+        // data = import.meta.env.DEV ? data : data[difficultyType];
+        const shuffledData: Question[] = helperFunctions.shuffle(
+          data[difficultyType],
+        );
         if (shuffledData.length > 0) {
           setQuestion(shuffledData[0].text);
         }

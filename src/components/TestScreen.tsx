@@ -32,89 +32,56 @@ const TestScreen = ({
   const [quizIndex, setQuizIndex] = useState(0);
   const navigate = useNavigate();
 
-  // Add trailing space for cursor visibility and display last character verification.
   const breakQuestion = question && question.split("");
 
   const calculateWpm = (seconds: number, totalKeyPressed: number) => {
-    if (seconds <= 0) {
-      return 0;
-    }
+    if (seconds <= 0) return 0;
+
     const words = totalKeyPressed / 5;
     const minutes = seconds / 60;
     const wpm = Math.round(words / minutes);
     return wpm;
   };
 
-  const handleUserKeyPress = (e: React.KeyboardEvent) => {
-    if (breakQuestion && breakQuestion.length) {
-      if (e.key === "Backspace" && quizIndex > 0) {
-        setQuizIndex(quizIndex - 1);
-        setUserInput(userInput.slice(0, -1));
-        return;
-      } else if (e.key === "Backspace" && quizIndex === 0) {
-        setQuizIndex(0);
-        return;
-      } else if (e.key === "CapsLock") {
-        return;
-      } else if (quizIndex < breakQuestion.length - 1) {
-        setQuizIndex(quizIndex + 1);
-        setUserInput(userInput.concat(e.key));
-        /*
-          Total Number of Words = Total Keys Pressed / 5
-          WPM = Total Number of Words / Time Elapsed in Minutes (rounded down)
-        */
+  const handleUserInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!breakQuestion) return;
 
-        const totalKeyPressed = userInput.length + 1;
+    const newValue = e.target.value;
+    const newValueArray = newValue.split("");
 
-        if (mode === "timed") {
-          const initialTime = 60;
-          const timeElapsed = initialTime - seconds;
-          const updatedWpm = calculateWpm(timeElapsed, totalKeyPressed);
-          setWpm(updatedWpm);
-        } else if (mode === "passage") {
-          const updatedWpm = calculateWpm(seconds, totalKeyPressed);
-          setWpm(updatedWpm);
-        }
+    setUserInput(newValueArray);
+    setQuizIndex(newValueArray.length);
 
-        /*
-        Accuracy = (Correct Keys Pressed /  Total Keys Pressed) * 100 = Accuracy%
-        */
-        let correctKeyPressed = 0;
-        // key pressed at the moment
-        if (e.key === breakQuestion[quizIndex]) {
-          correctKeyPressed += 1;
-        }
-        // all key pressed in the past
-        for (let index = 0; index < breakQuestion.length - 1; index++) {
-          if (breakQuestion[index] === userInput[index]) {
-            correctKeyPressed += 1;
-          }
-        }
+    const totalKeyPressed = newValueArray.length;
+    if (totalKeyPressed === 0) return;
 
-        const accuracy = Math.trunc(
-          (correctKeyPressed / totalKeyPressed) * 100,
+    // wpm
+    const timeElapsed = mode === "timed" ? 60 - seconds : seconds;
+    const currentWpm = calculateWpm(timeElapsed, totalKeyPressed);
+    setWpm(currentWpm);
+
+    // accuracy
+    const correctCount = newValueArray.reduce((acc, char, index) => {
+      return char === breakQuestion[index] ? acc + 1 : acc;
+    }, 0);
+
+    const currentAccuracy = Math.trunc((correctCount / totalKeyPressed) * 100);
+    setAccuracy(currentAccuracy);
+
+    // check for completion
+    if (totalKeyPressed === breakQuestion.length) {
+      const [correct, incorrect] =
+        helperFunctions.countCorrectIncorrectKeyPressed(
+          breakQuestion,
+          newValueArray,
         );
-        setAccuracy(accuracy);
-      }
-      // check for typed completion
-      if (quizIndex === breakQuestion.length - 1) {
-        const [correctKeyPressed, incorrectKeyPressed] =
-          helperFunctions.countCorrectIncorrectKeyPressed(
-            breakQuestion,
-            userInput,
-          );
-        // send score data to /result page
-        navigate("/result", {
-          state: {
-            wpm,
-            accuracy,
-            characters: {
-              correct: correctKeyPressed,
-              incorrect: incorrectKeyPressed,
-            },
-          },
-        });
-      }
+      navigate("/result", {
+        state: {
+          wpm: currentWpm,
+          accuracy: currentAccuracy,
+          characters: { correct, incorrect },
+        },
+      });
     }
   };
 
@@ -136,6 +103,9 @@ const TestScreen = ({
   };
 
   const handleRestartTestBtn = () => {
+    if (textAreaEl.current) {
+      textAreaEl.current.value = "";
+    }
     setQuizIndex(0);
     setUserInput([]);
     setAccuracy(100);
@@ -200,11 +170,15 @@ const TestScreen = ({
         {breakQuestion && (
           <div>
             <textarea
-              className="absolute top-0 z-[-1] h-0 w-0 opacity-0"
+              className="absolute top-0 z-[-1] h-0 w-0 bg-transparent"
               name="userInput"
               id="userInput"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck="false"
+              autoComplete="off"
               ref={textAreaEl}
-              onKeyDown={handleUserKeyPress}
+              onChange={handleUserInput}
             ></textarea>
             <div className="px-2 text-neutral-400">
               {breakQuestion.map((l, index) => (
