@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import IconRestart from "../assets/images/icon-restart.svg";
 import { useNavigate } from "react-router";
+import helperFunctions from "../utils/helperFunctions";
 
 type TestScreenProps = {
   question: string | null;
@@ -97,15 +98,11 @@ const TestScreen = ({
       }
       // check for typed completion
       if (quizIndex === breakQuestion.length - 2) {
-        let correctKeyPressed = 0;
-        let incorrectKeyPressed = 0;
-        for (let index = 0; index < breakQuestion.length - 1; index++) {
-          if (breakQuestion[index] === userInput[index]) {
-            correctKeyPressed += 1;
-          } else {
-            incorrectKeyPressed += 1;
-          }
-        }
+        const [correctKeyPressed, incorrectKeyPressed] =
+          helperFunctions.countCorrectIncorrectKeyPressed(
+            breakQuestion,
+            userInput,
+          );
         // send score data to /result page
         navigate("/result", {
           state: {
@@ -162,15 +159,12 @@ const TestScreen = ({
     function calculateResult() {
       if (mode === "timed" && seconds === 0) {
         if (breakQuestion) {
-          let correctKeyPressed = 0;
-          let incorrectKeyPressed = 0;
-          for (let index = 0; index < breakQuestion.length - 1; index++) {
-            if (breakQuestion[index] === userInput[index]) {
-              correctKeyPressed += 1;
-            } else {
-              incorrectKeyPressed += 1;
-            }
-          }
+          const [correctKeyPressed, incorrectKeyPressed] =
+            helperFunctions.countCorrectIncorrectKeyPressed(
+              breakQuestion,
+              userInput,
+            );
+
           navigate("/result", {
             state: {
               wpm,
