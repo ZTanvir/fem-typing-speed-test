@@ -21,8 +21,5 @@ jobs:
         run: npm run test
       - name: Build project
         run: npm run build
-      - uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID}}
-          vercel-project-id: ${{ secrets.PROJECT_ID}}
+      - name: Trigger Vercel deploy hook
+        run: curl -X POST ${{ secrets.VERCEL_DEPLOY_HOOK }}
