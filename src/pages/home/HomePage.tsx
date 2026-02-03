@@ -23,9 +23,9 @@ const HomePage = () => {
       const response = await fetch(`${fetchUrl}`);
 
       if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
         // in server /data/db.json/difficultyType not accessible
-        // data = import.meta.env.DEV ? data : data[difficultyType];
+        data = import.meta.env.DEV ? data : data[difficultyType];
         const shuffledData: Question[] = helperFunctions.shuffle(data);
         if (shuffledData.length > 0) {
           setQuestion(shuffledData[0].text);
