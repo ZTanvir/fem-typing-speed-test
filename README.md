@@ -69,7 +69,7 @@ to get user input.
 
 ## Getting Started
 
-To get a local copy of this project up and running, follow these steps.
+To get a local copy of this project up and running, follow these steps
 
 ### Prerequisites
 
