@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull:
+    types:
+      - closed
 
 jobs:
   simple_deployment_pipeline:
@@ -22,4 +25,25 @@ jobs:
       - name: Build project
         run: npm run build
       - name: Trigger Vercel deploy hook
+        if: ${{ github.event_name == 'push' && github.ref == 'ref/heads/main'   }}
         run: curl -X POST ${{ secrets.VERCEL_DEPLOY_HOOK }}
+
+  bump_version:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: "0"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_PREFIX: v
+          PRERELEASE: true
