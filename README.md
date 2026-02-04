@@ -4,7 +4,8 @@ This project is a classic "rite of passage" for developers. It’s a project tha
 
 [**View Live Demo**](https://fem-typing-speed-test.vercel.app) | [**Browse Source Code**](https://github.com/ZTanvir/fem-typing-speed-test)
 
-<video src="(https://github.com/user-attachments/assets/769ecd44-c99b-4d88-939e-12e4d6be76bb)" controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/769ecd44-c99b-4d88-939e-12e4d6be76bb" controls width="100%"></video>
+
 ![Desktop view](./screenshoots/homepage.png)
 ![Mobile view](./screenshoots/home-mobile.png)
 
